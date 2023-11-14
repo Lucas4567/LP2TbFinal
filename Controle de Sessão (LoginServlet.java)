@@ -1,0 +1,19 @@
+package com.example.servlets;
+
+@WebServlet("/login")
+public class LoginServlet extends HttpServlet {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+
+        if (UsuarioDAO.validarUsuario(username, password)) {
+            HttpSession session = request.getSession();
+            session.setAttribute("username", username);
+            response.sendRedirect("dashboard.jsp");
+        } else {
+            request.setAttribute("erro", "Usuário ou senha inválidos");
+            request.getRequestDispatcher("login.jsp").forward(request, response);
+        }
+    }
+}
