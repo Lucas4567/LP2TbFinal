@@ -1,0 +1,28 @@
+package com.example.servlets;
+
+import com.example.beans.Filme;
+import com.example.db.FilmeDAO; 
+
+@WebServlet("/cadastroFilme")
+public class CadastroFilmeServlet extends HttpServlet {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+
+            String titulo = request.getParameter("titulo");
+            String diretor = request.getParameter("diretor");
+
+            Filme filme = new Filme();
+            filme.setTitulo(titulo);
+            filme.setDiretor(diretor);
+
+            FilmeDAO.inserirFilme(filme);
+
+            response.sendRedirect("sucesso.jsp");
+        } catch (Exception e) {
+
+            request.setAttribute("erro", "Erro ao cadastrar filme");
+            request.getRequestDispatcher("erro.jsp").forward(request, response);
+        }
+    }
+}
